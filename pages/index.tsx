@@ -1,86 +1,92 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
+import type {GetServerSideProps, NextPage} from "next";
+import Head from "next/head";
+import Image from "next/image";
+import Link from 'next/link'
 
-const Home: NextPage = () => {
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+import Header from "../components/Header";
+import {getPosts} from "../utils/prisma";
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
 
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="rounded-md bg-gray-100 p-3 font-mono text-lg">
-            pages/index.tsx
-          </code>
-        </p>
-
-        <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and its API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className="flex h-24 w-full items-center justify-center border-t">
-        <a
-          className="flex items-center justify-center gap-2"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </a>
-      </footer>
-    </div>
-  )
+type Post = {
+    id: number
+    title: string,
+    content: string,
+    image: string
+}
+type Props = {
+    posts: Post[]
 }
 
-export default Home
+const Home: NextPage<Props> = ({posts}) => {
+
+    return (
+        <div className="flex relative min-h-screen flex-col ">
+            <Head>
+                <title>PaiseDekho Blog</title>
+                <link rel="icon" href="/favicon.ico"/>
+            </Head>
+
+            <div className="absolute w-full -z-10 bg-gray-100 h-[40vh]"/>
+            <main className="max-w-[1280px] flex flex-col  w-full mx-auto">
+                <Header/>
+                <div className=" flex flex-col lg:flex-row mt-2 space-x-8 items-center -z-10  ">
+                    <div className={"relative w-[90%] h-[200px] md:h-[350px]  mx-auto"}>
+                        <Image
+                            src="https://images.unsplash.com/photo-1675432980667-95da207814a5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80"
+                            alt=""
+                            className="z-10 rounded-md object-cover"
+                            fill={true}
+                        />
+                    </div>
+                    <div>
+                        <h1 className="text-4xl mt-2 font-bold">How to start investing?</h1>
+                        <p className="text-sm text-zinc-800 leading-5 mt-4">
+                            The first step to start investing or investment is the basics of
+                            investing. They are as follows: Select the budget you want to
+                            invest: Investment doesn’t always require large funds to begin
+                            with, a small investment can also begin to start the journey of
+                            investment.
+                        </p>
+                    </div>
+                </div>
+                <div className="grid mt-10 lg:grid-cols-2 place-items-center grid-cols-1 gap-5">
+                    {posts.map((item) => (
+                        <Link href={`${item.id}`}>
+                        <article className="max-w-[400px] w-full p-4 " key={item.id}>
+                            <div className={"relative w-full h-[190px] md:h-[300px]"}>
+                                <Image
+                                    src={item.image}
+                                    alt={""}
+                                    className={"rounded-md object-cover"}
+                                    fill={true}
+                                />
+                            </div>
+                            <h2 className="text-2xl font-semibold leading-normal">
+                                {item.title}
+                            </h2>
+                            <p className="line-clamp-3 text-sm text-zinc-500 leading-6">
+                                {item.content}
+                            </p>
+                        </article>
+                        </Link>
+                    ))}
+                </div>
+            </main>
+        </div>
+    );
+};
+
+
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+
+    const posts = await getPosts()
+    return {
+        props: {
+            posts: JSON.parse(JSON.stringify(posts))
+        }
+    }
+}
+
+
+
+export default Home;

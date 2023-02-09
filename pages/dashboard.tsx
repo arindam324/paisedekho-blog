@@ -1,0 +1,99 @@
+import React, {useEffect, useState} from "react";
+import Router from "next/router";
+import {GetServerSideProps} from "next";
+
+import {PrismaClient} from '@prisma/client'
+
+import Post from '../components/admin/Post'
+import Sidebar from "../components/admin/Sidebar";
+import EmailForm from "../components/admin/EmailForm";
+import type {PostType} from '../components/admin/Post'
+import {getPosts} from "../utils/prisma";
+
+type Post = {
+    id: number
+    title: string,
+    content: string,
+    image: string
+}
+type Props = {
+    posts: Post[]
+}
+
+const Dashboard: React.FC<Props> = ({posts}) => {
+    useEffect(() => {
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) {
+            Router.push("/login")
+        }
+    }, []);
+
+    const [selectedPost, setSelectedPost] = useState<null | PostType>(null)
+    const [showPosts, setShowPosts] = useState<boolean>(false)
+
+    return (
+        <div className="flex w-full min-h-screen">
+            <Sidebar/>
+            <div className="flex-1 grid gap-5  grid-cols-2 ml-72  p-10">
+                <div>
+                    <h2 className={"text-4xl font-semibold"}>All Posts</h2>
+                    <div className={"max-w-3xl w-full mt-4"}>
+                        <div className={"flex w-full justify-between items-center"}>
+                            <div className={"w-[95%] h-[1px] bg-black"}/>
+                            <button onClick={() => setShowPosts(!showPosts)}>
+                                {showPosts ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                              d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+
+                                ) : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         strokeWidth="1.5"
+                                         stroke="currentColor" className="w-6 h-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round"
+                                              d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                )}
+                            </button>
+                        </div>
+                        {
+                            showPosts && (
+                                <div className={"flex w-full justify-between"}>
+                                    <div className={"space-y-4 max-w-3xl w-full "}>
+                                        {posts.map(item => (
+                                            <Post
+                                                setSelectedPost={setSelectedPost}
+                                                key={item.id}
+                                                title={item.title}
+                                                content={item.content}
+                                                image={item.image}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            )
+                        }
+                    </div>
+                </div>
+
+                <div className="mx-auto w-full ">
+                    <EmailForm selectedPost={selectedPost}/>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+    const posts = await getPosts()
+    return {
+        props: {
+            posts: JSON.parse(JSON.stringify(posts))
+        }
+    }
+}
+
+
+export default Dashboard;
