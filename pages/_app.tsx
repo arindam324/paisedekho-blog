@@ -12,6 +12,8 @@ import { useRouter } from "next/router";
 const publicPages: Array<string> = [
   "/",
   "https://paisedekho-blog.vercel.app/",
+  "https://paisedekho-blog.vercel.app/*",
+  "https://paisedekho-blog.vercel.app/login",
   "/*",
   "/login",
 ];
