@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@clerk/nextjs": "^4.9.1",
     "@prisma/client": "4.1.0",
     "@tailwindcss/line-clamp": "^0.4.2",
     "@types/jsonwebtoken": "^9.0.1",

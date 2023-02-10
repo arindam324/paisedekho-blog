@@ -6,7 +6,6 @@ import Link from 'next/link'
 import Header from "../components/Header";
 import {getPosts} from "../utils/prisma";
 
-
 type Post = {
     id: number
     title: string,

@@ -2,14 +2,12 @@ import Image from "next/image";
 import React from "react";
 
 export type PostType = {
-
     image: string,
     title: string,
     content: string
 }
 
 type PostProps = {
-
     image: string,
     title: string,
     content: string

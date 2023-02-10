@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from "react";
-import Router from "next/router";
 import {GetServerSideProps} from "next";
-
-import {PrismaClient} from '@prisma/client'
-
 import Post from '../components/admin/Post'
 import Sidebar from "../components/admin/Sidebar";
 import EmailForm from "../components/admin/EmailForm";
 import type {PostType} from '../components/admin/Post'
 import {getPosts} from "../utils/prisma";
+import {SignedIn, RedirectToSignIn, useUser} from '@clerk/nextjs'
+import {useRouter} from "next/router";
+
 
 type Post = {
     id: number
@@ -21,13 +20,6 @@ type Props = {
 }
 
 const Dashboard: React.FC<Props> = ({posts}) => {
-    useEffect(() => {
-        const accessToken = localStorage.getItem("accessToken");
-        if (!accessToken) {
-            Router.push("/login")
-        }
-    }, []);
-
     const [selectedPost, setSelectedPost] = useState<null | PostType>(null)
     const [showPosts, setShowPosts] = useState<boolean>(false)
 
@@ -83,6 +75,8 @@ const Dashboard: React.FC<Props> = ({posts}) => {
                 </div>
             </div>
         </div>
+
+
     );
 };
 
@@ -94,6 +88,5 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
         }
     }
 }
-
 
 export default Dashboard;
