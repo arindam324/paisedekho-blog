@@ -11,10 +11,13 @@ datasource db {
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  title     String   @unique
-  content   String
-  image     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               Int      @id @default(autoincrement())
+  title            String   @unique
+  slug             String   @unique
+  meta_description String
+  content          String
+  isPrmary         Boolean  @default(false)
+  image            String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }

@@ -6,7 +6,6 @@ import RichTextEditor from "./RichTextEditor";
 import axios from "axios";
 
 const EmailForm: React.FC<{ selectedPost: PostType | null }> = ({selectedPost}) => {
-
     const [title, setTitle] = useInput({initialValue: ''})
     const [image, setImage] = useInput({initialValue: ''})
     const [content, setContent] = useInput({initialValue: ''})
@@ -21,12 +20,14 @@ const EmailForm: React.FC<{ selectedPost: PostType | null }> = ({selectedPost}) 
 
     const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
-        await axios.post('/api/posts', {
-            title,
-            image,
-            content
-        })
-
+        if (selectedPost) {
+            const {id} = selectedPost
+            await axios.post(`/api/posts?id=${id}`, {
+                title,
+                image,
+                content
+            })
+        }
         toast.success("Content Updated")
     }
 

@@ -5,9 +5,7 @@ import Sidebar from "../components/admin/Sidebar";
 import EmailForm from "../components/admin/EmailForm";
 import type {PostType} from '../components/admin/Post'
 import {getPosts} from "../utils/prisma";
-import {SignedIn, RedirectToSignIn, useUser} from '@clerk/nextjs'
 import {useRouter} from "next/router";
-
 
 type Post = {
     id: number
@@ -23,12 +21,21 @@ const Dashboard: React.FC<Props> = ({posts}) => {
     const [selectedPost, setSelectedPost] = useState<null | PostType>(null)
     const [showPosts, setShowPosts] = useState<boolean>(false)
 
+    const router = useRouter()
+
     return (
         <div className="flex w-full min-h-screen">
             <Sidebar/>
             <div className="flex-1 grid gap-5  grid-cols-2 ml-72  p-10">
                 <div>
-                    <h2 className={"text-4xl font-semibold"}>All Posts</h2>
+                    <div className={"flex items-center justify-between"}>
+                        <h2 className={"text-4xl font-semibold"}>All Posts</h2>
+                        <button onClick={() => router.push('/newPost')}
+                                className={"px-8 py-2 rounded-md bg-green-600 text-white"}>
+                            Create new Post
+                        </button>
+                    </div>
+
                     <div className={"max-w-3xl w-full mt-4"}>
                         <div className={"flex w-full justify-between items-center"}>
                             <div className={"w-[95%] h-[1px] bg-black"}/>
@@ -58,6 +65,7 @@ const Dashboard: React.FC<Props> = ({posts}) => {
                                             <Post
                                                 setSelectedPost={setSelectedPost}
                                                 key={item.id}
+                                                id={item.id}
                                                 title={item.title}
                                                 content={item.content}
                                                 image={item.image}

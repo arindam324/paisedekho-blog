@@ -2,22 +2,24 @@ import Image from "next/image";
 import React from "react";
 
 export type PostType = {
+    id: number,
     image: string,
     title: string,
     content: string
 }
 
 type PostProps = {
+    id: number,
     image: string,
     title: string,
     content: string
     setSelectedPost: (post: PostType) => void
 }
 
-const Post: React.FC<PostProps> = ({image, title, content, setSelectedPost}) => {
+const Post: React.FC<PostProps> = ({image, title, id, content, setSelectedPost}) => {
     return (
         <article
-            onClick={() => setSelectedPost({image, title, content})}
+            onClick={() => setSelectedPost({id, image, title, content})}
             className={"p-4 flex cursor-pointer rounded-md  space-x-4 overflow-hidden shadow-lg"}>
             <div className={'w-[40%]  h-[80px] relative'}>
                 <Image src={image} className={"object-cover"} fill={true}

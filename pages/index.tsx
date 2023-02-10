@@ -4,19 +4,22 @@ import Image from "next/image";
 import Link from 'next/link'
 
 import Header from "../components/Header";
-import {getPosts} from "../utils/prisma";
+import {prisma} from "../utils/prisma";
+import {Post} from '@prisma/client'
+//
+// type Post = {
+//     id: number
+//     title: string,
+//     content: string,
+//     image: string
+// }
 
-type Post = {
-    id: number
-    title: string,
-    content: string,
-    image: string
-}
 type Props = {
-    posts: Post[]
+    posts: Post[],
+    primaryPost: Post
 }
 
-const Home: NextPage<Props> = ({posts}) => {
+const Home: NextPage<Props> = ({posts, primaryPost}) => {
 
     return (
         <div className="flex relative min-h-screen flex-col ">
@@ -28,45 +31,44 @@ const Home: NextPage<Props> = ({posts}) => {
             <div className="absolute w-full -z-10 bg-gray-100 h-[40vh]"/>
             <main className="max-w-[1280px] flex flex-col  w-full mx-auto">
                 <Header/>
-                <div className=" flex flex-col lg:flex-row mt-2 space-x-8 items-center -z-10  ">
-                    <div className={"relative w-[90%] h-[200px] md:h-[350px]  mx-auto"}>
-                        <Image
-                            src="https://images.unsplash.com/photo-1675432980667-95da207814a5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80"
-                            alt=""
-                            className="z-10 rounded-md object-cover"
-                            fill={true}
-                        />
+                <Link href={`/${primaryPost.slug}`}>
+                    <div className=" flex flex-col lg:flex-row mt-2 space-x-8 items-center -z-10  ">
+                        <div className={"relative w-[90%] h-[200px] md:h-[350px]  mx-auto"}>
+                            <Image
+                                src={primaryPost?.image}
+                                alt=""
+                                priority={true}
+                                className="z-10 rounded-md object-cover"
+                                fill={true}
+                            />
+                        </div>
+                        <div>
+                            <h1 className="text-4xl mt-2 font-bold">{primaryPost.title}</h1>
+                            <p className="text-sm text-zinc-800 leading-5 mt-4">
+                                {primaryPost.content}
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <h1 className="text-4xl mt-2 font-bold">How to start investing?</h1>
-                        <p className="text-sm text-zinc-800 leading-5 mt-4">
-                            The first step to start investing or investment is the basics of
-                            investing. They are as follows: Select the budget you want to
-                            invest: Investment doesn’t always require large funds to begin
-                            with, a small investment can also begin to start the journey of
-                            investment.
-                        </p>
-                    </div>
-                </div>
+                </Link>
                 <div className="grid mt-10 lg:grid-cols-2 place-items-center grid-cols-1 gap-5">
                     {posts.map((item) => (
-                        <Link href={`${item.id}`}>
-                        <article className="max-w-[400px] w-full p-4 " key={item.id}>
-                            <div className={"relative w-full h-[190px] md:h-[300px]"}>
-                                <Image
-                                    src={item.image}
-                                    alt={""}
-                                    className={"rounded-md object-cover"}
-                                    fill={true}
-                                />
-                            </div>
-                            <h2 className="text-2xl font-semibold leading-normal">
-                                {item.title}
-                            </h2>
-                            <p className="line-clamp-3 text-sm text-zinc-500 leading-6">
-                                {item.content}
-                            </p>
-                        </article>
+                        <Link key={item.id} href={`${item.slug}`}>
+                            <article className="max-w-[400px] w-full p-4 ">
+                                <div className={"relative w-full h-[190px] md:h-[300px]"}>
+                                    <Image
+                                        src={item.image}
+                                        alt={""}
+                                        className={"rounded-md object-cover"}
+                                        fill={true}
+                                    />
+                                </div>
+                                <h2 className="text-2xl font-semibold leading-normal">
+                                    {item.title}
+                                </h2>
+                                <p className="line-clamp-3 text-sm text-zinc-500 leading-6">
+                                    {item.content}
+                                </p>
+                            </article>
                         </Link>
                     ))}
                 </div>
@@ -78,14 +80,23 @@ const Home: NextPage<Props> = ({posts}) => {
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
 
-    const posts = await getPosts()
+    const posts = await prisma.post.findMany({
+        where: {
+            isPrmary: false
+        },
+    });
+    const PrimaryPost = await prisma.post.findFirst({
+        where: {
+            isPrmary: true
+        }
+    })
     return {
         props: {
-            posts: JSON.parse(JSON.stringify(posts))
+            posts: JSON.parse(JSON.stringify(posts)),
+            primaryPost: JSON.parse(JSON.stringify(PrimaryPost))
         }
     }
 }
-
 
 
 export default Home;

@@ -1,4 +1,5 @@
 import {useState} from "react";
+import Link from "next/link";
 
 const Sidebar = () => {
     const [selectedTab, setSelectedTab] = useState<string>("");
@@ -8,9 +9,9 @@ const Sidebar = () => {
             <div>
                 <h2 className="text-3xl font-semibold">PaiseDekho</h2>
                 <nav className="flex flex-col mt-12 space-y-5">
-                    <a
+                    <Link
                         className="flex block bg-[#eee6e2] px-8 py-2 rounded-md items-center space-x-5"
-                        href="/"
+                        href="/newPost"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -27,7 +28,7 @@ const Sidebar = () => {
                             />
                         </svg>
                         <span>DashBoard</span>
-                    </a>
+                    </Link>
 
                     <a className="flex items-center block space-x-5 px-8 py-2" href="/">
                         <svg

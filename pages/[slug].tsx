@@ -53,9 +53,9 @@ interface QueryParams extends ParsedUrlQuery {
 
 export const getServerSideProps: GetServerSideProps<Props, QueryParams> = async (context) => {
     const {slug} = context.query;
-    const post = await prisma.post.findUnique({
+    const post = await prisma.post.findMany({
         where: {
-            id: Number(slug)
+            slug: slug?.toString()
         }
     })
     return {
