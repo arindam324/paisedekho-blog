@@ -25,10 +25,9 @@ const Dashboard: React.FC<Props> = ({ posts }) => {
   const [showPosts, setShowPosts] = useState<boolean>(false);
 
   const router = useRouter();
-
   const { user } = useUser();
 
-  if (!user) Router.push("/login");
+  // if (!user) Router.push("/login");
 
   return (
     <div className="flex w-full min-h-screen">
@@ -118,4 +117,4 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
   };
 };
 
-export default withPageAuthRequired(Dashboard);
+export default Dashboard;
