@@ -11,11 +11,11 @@ import { useRouter } from "next/router";
 
 const publicPages: Array<string> = [
   "/",
-  "https://paisedekho-blog.vercel.app/",
-  "https://paisedekho-blog.vercel.app/*",
-  "https://paisedekho-blog.vercel.app/login",
   "/*",
   "/login",
+  "https://paisedekho-blog-l31r.vercel.app/",
+  "https://paisedekho-blog-l31r.vercel.app/*",
+  "https://paisedekho-blog-l31r.vercel.app/login",
 ];
 
 function MyApp({ Component, pageProps }: AppProps) {
