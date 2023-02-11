@@ -1,44 +1,11 @@
 import "../styles/globals.css";
 import "react-quill/dist/quill.snow.css";
 import type { AppProps } from "next/app";
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  RedirectToSignIn,
-} from "@clerk/nextjs";
+
 import { useRouter } from "next/router";
 
-const publicPages: Array<string> = [
-  "/",
-  "/*",
-  "/login",
-  "https://paisedekho-blog-l31r.vercel.app/",
-  "https://paisedekho-blog-l31r.vercel.app/*",
-  "https://paisedekho-blog-l31r.vercel.app/login",
-];
-
 function MyApp({ Component, pageProps }: AppProps) {
-  const { pathname } = useRouter();
-
-  const isPublicPage = publicPages.includes(pathname);
-
-  return (
-    <ClerkProvider>
-      {isPublicPage ? (
-        <Component {...pageProps} />
-      ) : (
-        <>
-          <SignedIn>
-            <Component {...pageProps} />
-          </SignedIn>
-          <SignedOut>
-            <RedirectToSignIn />
-          </SignedOut>
-        </>
-      )}
-    </ClerkProvider>
-  );
+  return <Component {...pageProps} />;
 }
 
 export default MyApp;

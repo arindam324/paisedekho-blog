@@ -36,9 +36,10 @@ const Home: NextPage<Props> = ({ posts, primaryPost }) => {
             </div>
             <div>
               <h1 className="text-4xl mt-2 font-bold">{primaryPost?.title}</h1>
-              <p className="text-sm text-zinc-800 leading-5 mt-4">
-                {primaryPost?.content}
-              </p>
+              <div
+                className="text-sm text-zinc-800 leading-5 mt-4"
+                dangerouslySetInnerHTML={{ __html: primaryPost.content }}
+              />
             </div>
           </div>
         </Link>
@@ -57,9 +58,10 @@ const Home: NextPage<Props> = ({ posts, primaryPost }) => {
                 <h2 className="text-2xl font-semibold leading-normal">
                   {item.title}
                 </h2>
-                <p className="line-clamp-3 text-sm text-zinc-500 leading-6">
-                  {item.content}
-                </p>
+                <div
+                  className="line-clamp-3 text-sm text-zinc-500 leading-6"
+                  dangerouslySetInnerHTML={{ __html: item.content }}
+                />
               </article>
             </Link>
           ))}
