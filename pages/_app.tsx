@@ -2,10 +2,15 @@ import "../styles/globals.css";
 import "react-quill/dist/quill.snow.css";
 import type { AppProps } from "next/app";
 
-import { useRouter } from "next/router";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  const { user } = pageProps;
+  return (
+    <UserProvider user={user}>
+      <Component {...pageProps} />
+    </UserProvider>
+  );
 }
 
 export default MyApp;

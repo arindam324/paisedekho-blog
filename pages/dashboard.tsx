@@ -5,7 +5,9 @@ import Sidebar from "../components/admin/Sidebar";
 import EmailForm from "../components/admin/EmailForm";
 import type { PostType } from "../components/admin/Post";
 import { getPosts } from "../utils/prisma";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
+
+import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 
 type Post = {
   id: number;
@@ -13,6 +15,7 @@ type Post = {
   content: string;
   image: string;
 };
+
 type Props = {
   posts: Post[];
 };
@@ -22,6 +25,10 @@ const Dashboard: React.FC<Props> = ({ posts }) => {
   const [showPosts, setShowPosts] = useState<boolean>(false);
 
   const router = useRouter();
+
+  const { user } = useUser();
+
+  if (!user) Router.push("/login");
 
   return (
     <div className="flex w-full min-h-screen">
@@ -111,4 +118,4 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
   };
 };
 
-export default Dashboard;
+export default withPageAuthRequired(Dashboard);
