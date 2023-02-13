@@ -41,7 +41,7 @@ const EmailForm: React.FC<{ selectedPost: string | null }> = ({
   const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (selectedPost) {
-      await axios.post(`/api/posts?id=${selectedPost}`, {
+      await axios.post(`/api/posts?slug=${selectedPost}`, {
         title,
         image,
         content,
