@@ -21,8 +21,8 @@ const Post: React.FC<Props> = ({ post }) => {
         openGraph={{
           type: "article",
           article: {
-            publishedTime: `${post.createdAt.toISOString()}`,
-            modifiedTime: `${post.updatedAt.toISOString()}`,
+            publishedTime: post.createdAt.toString(),
+            modifiedTime: post.updatedAt.toString(),
             tags: post.tags,
           },
           url: `${process.env.BASE_URL}/${post.slug}`,
