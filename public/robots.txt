@@ -1,0 +1,14 @@
+User-agent: *
+Disallow: /admin/
+
+use-agent:*
+Disallow: /login
+
+
+User-agent: *
+Allow: /
+
+user-agent: *
+Allow: /*
+
+Sitemap: https://www.paisadekho.com/sitemap.xml

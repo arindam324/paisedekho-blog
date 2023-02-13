@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         openGraph={{
           type: "website",
           locale: "en_IE",
-          url: "https://www.paisadekho.com",
+          url: process.env.BASE_URL,
           siteName: "Paisadekho",
         }}
       />

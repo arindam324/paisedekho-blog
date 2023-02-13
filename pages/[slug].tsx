@@ -17,7 +17,7 @@ const Post: React.FC<Props> = ({ post }) => {
       <NextSeo
         title={post.title}
         description={post.meta_description}
-        canonical={`www.example.com/${post.slug}`}
+        canonical={`${process.env.BASE_URL}/${post.slug}`}
         openGraph={{
           type: "article",
           article: {
@@ -26,7 +26,7 @@ const Post: React.FC<Props> = ({ post }) => {
 
             tags: post.tags,
           },
-          url: `www.example.com/${post.slug}`,
+          url: `${process.env.BASE_URL}/${post.slug}`,
           site_name: "PaisaDekho Blog",
         }}
       />
