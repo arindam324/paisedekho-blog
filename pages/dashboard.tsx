@@ -1,33 +1,22 @@
 import React, { useState } from "react";
-import { GetServerSideProps } from "next";
 import Post from "../components/admin/Post";
 import Sidebar from "../components/admin/Sidebar";
 import EmailForm from "../components/admin/EmailForm";
-import type { PostType } from "../components/admin/Post";
 import { getPosts } from "../utils/prisma";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
-import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import { requireAuthentication } from "../utils/requireAuthentication";
 
-type Post = {
-  id: number;
-  title: string;
-  content: string;
-  image: string;
-};
+import { Post as Postype } from "@prisma/client";
 
 type Props = {
-  posts: Post[];
+  posts: Postype[];
 };
 
 const Dashboard: React.FC<Props> = ({ posts }) => {
-  const [selectedPost, setSelectedPost] = useState<null | PostType>(null);
+  const [selectedPost, setSelectedPost] = useState<null | string>(null);
   const [showPosts, setShowPosts] = useState<boolean>(false);
-
   const router = useRouter();
-  const { user } = useUser();
-
-  // if (!user) Router.push("/login");
 
   return (
     <div className="flex w-full min-h-screen">
@@ -88,8 +77,8 @@ const Dashboard: React.FC<Props> = ({ posts }) => {
                     <Post
                       setSelectedPost={setSelectedPost}
                       key={item.id}
-                      id={item.id}
                       title={item.title}
+                      slug={item.slug}
                       content={item.content}
                       image={item.image}
                     />
@@ -108,13 +97,13 @@ const Dashboard: React.FC<Props> = ({ posts }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
+export const getServerSideProps = requireAuthentication(async (context) => {
   const posts = await getPosts();
   return {
     props: {
       posts: JSON.parse(JSON.stringify(posts)),
     },
   };
-};
+});
 
 export default Dashboard;

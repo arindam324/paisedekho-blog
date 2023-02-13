@@ -20,4 +20,17 @@ model Post {
   image            String
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+  tags             String[] @default([])
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String
+  password String
+  role     Role   @default(Editor)
+}
+
+enum Role {
+  Editor
+  Admin
 }

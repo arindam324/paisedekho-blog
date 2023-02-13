@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Link from "next/link";
 
+import Logout from "../../utils/logout";
+
 const Sidebar = () => {
   const [selectedTab, setSelectedTab] = useState<string>("");
   return (
@@ -71,7 +73,9 @@ const Sidebar = () => {
             />
           </svg>
         </div>
-        <span>Log out</span>
+        <span onClick={Logout} className="cursor-pointer">
+          Log out
+        </span>
       </div>
     </aside>
   );

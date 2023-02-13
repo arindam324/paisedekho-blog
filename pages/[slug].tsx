@@ -8,19 +8,35 @@ import Image from "next/image";
 import { ParsedUrlQuery } from "querystring";
 
 import { prisma } from "../utils/prisma";
+import { NextSeo } from "next-seo";
+import { Post } from "@prisma/client";
 
 const Post: React.FC<Props> = ({ post }) => {
   return (
     <div className="flex relative min-h-screen flex-col ">
-      <Head>
-        <title>PaiseDekho Blog</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <NextSeo
+        title={post.title}
+        description={post.meta_description}
+        canonical={`www.example.com/${post.slug}`}
+        openGraph={{
+          type: "article",
+          article: {
+            publishedTime: post.createdAt.toISOString(),
+            modifiedTime: post.updatedAt.toISOString(),
+
+            tags: post.tags,
+          },
+          url: `www.example.com/${post.slug}`,
+          site_name: "PaisaDekho Blog",
+        }}
+      />
       <div className="absolute w-full -z-10 bg-gray-100 h-[40vh]" />
       <main className="max-w-[1280px] flex flex-col  w-full mx-auto">
         <Header />
         <div
-          className={"relative mt-10 w-[90%] h-[200px] md:h-[350px]  mx-auto"}
+          className={
+            "relative mt-10 max-w-[90%] h-[200px] md:h-[350px]  mx-auto"
+          }
         >
           <Image
             src={post.image}
@@ -44,12 +60,7 @@ const Post: React.FC<Props> = ({ post }) => {
 };
 
 type Props = {
-  post: {
-    image: string;
-    title: string;
-    id: string;
-    content: string;
-  };
+  post: Post;
 };
 
 interface QueryParams extends ParsedUrlQuery {

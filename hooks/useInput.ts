@@ -1,17 +1,17 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 
 interface InputProps {
-    initialValue: string;
+  initialValue: string;
 }
 
-const useInput = ({initialValue}: InputProps) => {
-    const [value, setValue] = useState(initialValue);
+const useInput = ({ initialValue }: InputProps) => {
+  const [value, setValue] = useState(initialValue);
 
-    const handleChange = (newVal: string) => {
-        setValue(newVal);
-    };
+  const handleChange = (newVal: string) => {
+    setValue(newVal);
+  };
 
-    return [value, handleChange] as const;
+  return [value, handleChange] as const;
 };
 
 export default useInput;

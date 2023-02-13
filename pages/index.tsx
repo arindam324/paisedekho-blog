@@ -15,11 +15,6 @@ type Props = {
 const Home: NextPage<Props> = ({ posts, primaryPost }) => {
   return (
     <div className="flex relative min-h-screen flex-col ">
-      <Head>
-        <title>PaiseDekho Blog</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <div className="absolute w-full -z-10 bg-gray-100 h-[40vh]" />
       <main className="max-w-[1280px] flex flex-col  w-full mx-auto">
         <Header />
