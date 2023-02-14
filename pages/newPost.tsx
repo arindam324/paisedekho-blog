@@ -11,6 +11,26 @@ const newPost = () => {
   const [content, setContent] = useInput({ initialValue: "" });
   const [metaDescription, setMetaDescription] = useInput({ initialValue: "" });
 
+  const onChangeUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "xrcxywi3");
+    try {
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/dmhxxjvna/image/upload",
+        formData
+      );
+      setImage(res.data.secure_url);
+      toast.success("Image Uploaded");
+    } catch (err) {
+      console.error(err);
+      toast.success("Image isn't Uploaded");
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
@@ -33,8 +53,6 @@ const newPost = () => {
         content,
         metaDescription,
       });
-
-      console.log(response);
 
       setTitle("");
       setImage("");
@@ -71,23 +89,36 @@ const newPost = () => {
               className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
           </div>
+
           <div className="mb-5">
             <label
-              htmlFor="Image"
-              className="mb-3 block text-base font-medium text-[#07074D]"
+              htmlFor="formFile"
+              className="form-label inline-block mb-2 text-gray-700"
             >
               Image
             </label>
             <input
-              id={"image"}
-              type="text"
-              required
-              placeholder="image"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              className="w-full form-select rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              onChange={onChangeUpload}
+              className="form-control
+            block
+            w-full
+            px-3
+            py-1.5
+            text-base
+            font-normal
+            text-gray-700
+            bg-white bg-clip-padding
+            border border-solid border-gray-300
+            rounded
+            transition
+            ease-in-out
+            m-0
+            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              type="file"
+              id="formFile"
             />
           </div>
+
           <div className="mb-5">
             <label
               htmlFor="meta_description"

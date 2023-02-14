@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <DefaultSeo
         title="Financial Solutions for a Better Tomorrow | PaisaDekho"
-        description="Get expert financial solutions from PaisaDekho . Our team of experts provides personalized solutions to help you reach your financial goals. Get started today!"
+        description="Best financial solution for all your needs"
         openGraph={{
           type: "website",
           locale: "en_IE",
