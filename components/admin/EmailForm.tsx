@@ -5,7 +5,6 @@ import RichTextEditor from "./RichTextEditor";
 import axios from "axios";
 import Loader from "../Loader";
 import Image from "next/image";
-import cloudinary from "../../utils/cloudinary";
 
 const EmailForm: React.FC<{ selectedPost: string | null }> = ({
   selectedPost,
