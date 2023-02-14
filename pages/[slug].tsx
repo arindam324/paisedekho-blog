@@ -12,11 +12,6 @@ import { NextSeo } from "next-seo";
 import { Post } from "@prisma/client";
 
 const Post: React.FC<Props> = ({ post }) => {
-  const shortenedContent = (htmlContent: string) =>
-    htmlContent.replace(
-      /(https?:\/\/[^\s]+)/g,
-      (link) => link.substring(0, 30) + "..."
-    );
   return (
     <div className="flex relative min-h-screen flex-col ">
       <NextSeo
@@ -31,6 +26,14 @@ const Post: React.FC<Props> = ({ post }) => {
             tags: post.tags,
           },
           url: `${process.env.BASE_URL}/${post.slug}`,
+          images: [
+            {
+              url: post.image,
+              width: 850,
+              height: 650,
+              alt: post.title,
+            },
+          ],
           site_name: "PaisaDekho Blog",
         }}
       />
@@ -55,7 +58,7 @@ const Post: React.FC<Props> = ({ post }) => {
             <div
               className={"text-lg leading-normal mt-8 text-center"}
               dangerouslySetInnerHTML={{
-                __html: shortenedContent(post.content),
+                __html: post.content,
               }}
             />
           </div>
